@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart ' as http;
+
+import 'dashboard.dart';
+
 
 class MyLogin extends StatefulWidget {
-  const MyLogin({Key? key}) : super(key: key);
+  //const MyLogin({Key key}) : super(key: key);
+
 
   @override
   _MyLoginState createState() => _MyLoginState();
@@ -10,6 +15,10 @@ class MyLogin extends StatefulWidget {
 class _MyLoginState extends State<MyLogin> {
   @override
   Widget build(BuildContext context) {
+
+    var emailController = TextEditingController();
+    var passwordController = TextEditingController();
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -39,6 +48,7 @@ class _MyLoginState extends State<MyLogin> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: emailController,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
@@ -52,6 +62,7 @@ class _MyLoginState extends State<MyLogin> {
                             height: 30,
                           ),
                           TextField(
+                            controller: passwordController,
                             style: TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -68,10 +79,26 @@ class _MyLoginState extends State<MyLogin> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Sign in',
-                                style: TextStyle(
-                                    fontSize: 27, fontWeight: FontWeight.w700),
+                              // Text(
+                              //   'Se connecter',
+                              //   style: TextStyle(
+                              //       fontSize: 27, fontWeight: FontWeight.w700),
+                              // ),
+                              TextButton(
+                                onPressed: () {
+                                  //print(emailController.text);
+                                  //print(passwordController.text);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+                                },
+                                child: Text(
+                                  'Se connecter',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      //decoration: TextDecoration.underline,
+                                      color: Color(0xff4c505b),
+                                      fontSize: 15),
+                                ),
+                                style: ButtonStyle(),
                               ),
                               CircleAvatar(
                                 radius: 30,
@@ -129,4 +156,29 @@ class _MyLoginState extends State<MyLogin> {
       ),
     );
   }
-}
+
+Future<void> login() async {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  if (passwordController.text.isNotEmpty && emailController.text.isNotEmpty) {
+
+    var response =
+    await http.post(Uri.parse("http://localhost:8080/getalllogin"),
+        body: ({
+          'email': emailController.text,
+          'password': passwordController.text
+        }));
+    if (response.statusCode == 200){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Dashboard()));
+    }else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Invalid Credentials.")));
+    }
+  }else {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Black Field Not Allowed"))); 
+  }
+  }
+ }
+
+

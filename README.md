@@ -33,4 +33,13 @@ This project is a starting point for a Flutter application.
 
 - clone repo and setup dart plugin
 
+# Tout d'abord, il faut commencer par s'enregistrer 
+
+Si c'est un utilisateur simple, on l'envoie directement sur le Dashboard, si non pour l'administrateur il doit être capable 
+de creer un autre utilisateur, 
+
+La page "Administration" permet d'afficher les quatre administrations "Mairie", "Police", "Justice" et "ONT"
+
+Notre Application gère la "Mairie", losque l'utilisateur clic sur "Mairie" la page d'acceuil s'affiche et on peut faire une demande 
+d'acte de naissance à partir d'un formulaire. 
 
